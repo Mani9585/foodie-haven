@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <title>GTA RP Food Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- jsPDF for generating PDF receipt -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -16,7 +20,7 @@
       /* Background image */
       background:
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
-        url("Images/background.jpg") center center fixed no-repeat;
+        url("../Images/background.jpg") center center fixed no-repeat;
       background-size: cover;
 
       color: #f5f5f5;
@@ -55,7 +59,6 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* brand block with logo + text */
     .shop-brand {
       display: flex;
       align-items: flex-start;
@@ -327,7 +330,6 @@
       text-align: center;
     }
 
-    /* Typed quantity input + OK */
     .qty-input {
       width: 60px;
       padding: 3px;
@@ -360,7 +362,6 @@
       transform: scale(0.96);
     }
 
-    /* Checkout input fields (Character + Phone) */
     .checkout-inputs {
       display: flex;
       flex-direction: column;
@@ -386,7 +387,7 @@
       color: rgba(255, 255, 255, 0.5);
     }
 
-    /* ---------- Responsive: mobile / tablet ---------- */
+    /* ---------- Responsive ---------- */
 
     @media (max-width: 900px) {
       body {
@@ -477,7 +478,7 @@
       <header class="shop-header">
         <div class="shop-brand">
           <!-- BUSINESS LOGO -->
-          <img src="Images/logo.png" alt="Foodie Haven Logo" class="shop-logo">
+          <img src="../Images/logo.png" alt="Foodie Haven Logo" class="shop-logo">
           <div>
             <div class="shop-title">Foodie Haven</div>
             <div class="shop-tagline">Adyar, Near Boat Garage, 8245</div>
@@ -538,7 +539,6 @@
       </div>
 
       <div class="checkout">
-        <!-- Character + IC Phone -->
         <div class="checkout-inputs">
           <label for="char-name">Character Name</label>
           <input
@@ -559,31 +559,29 @@
 
         <button class="btn btn-checkout" id="checkout-btn">Place Order</button>
         <div class="checkout-note">
-          After placing order, the receipt will be sent directly to our Discord channel.
+          After placing order, the receipt will be sent to Discord. You can also download it as PDF.
         </div>
       </div>
     </aside>
   </div>
 
   <script>
-
     // shop / receipt config
     const SHOP_NAME = "Foodie Haven";
     const SHOP_ADDRESS = "Adyar, Near Boat Garage, 8245";
     const GST_RATE = 0; // in %
 
-    // --- MENU: your items, prices (₹), and image paths ---
     const MENU_ITEMS = [
-      { id: 1, name: "HamBurger",             description: "Classic grilled burger.",              price: 1700, image: "Images/HamBurger.png" },
-      { id: 2, name: "Cheese Burger",         description: "Juicy patty with melted cheese.",     price: 1700, image: "Images/Cheese Burger.png" },
-      { id: 3, name: "Double Cheese Burger",  description: "Two patties, double cheese blast.",   price: 2500, image: "Images/Double Cheese Burger.png" },
-      { id: 4, name: "BBQ Bacon Burger",      description: "Smoky BBQ sauce & crispy bacon.",     price: 3200, image: "Images/BBQ Bacon Burger.png" },
-      { id: 5, name: "Chicken Burger",        description: "Crispy chicken fillet burger.",       price: 2500, image: "Images/Chicken Burger.png" },
-      { id: 6, name: "Fries",                 description: "Golden salted fries.",                price: 750,  image: "Images/Fries.png" },
-      { id: 7, name: "Spunk",                 description: "Signature soft drink.",               price: 2500, image: "Images/Spunk.png" },
-      { id: 8, name: "Spunk Lite",            description: "Low sugar, same kick.",               price: 1700, image: "Images/Spunk Lite.png" },
-      { id: 9, name: "E-Cola",                description: "Carbonated energy cola.",             price: 2500, image: "Images/E-Cola.png" },
-      { id: 10, name: "E-Cola Lite",          description: "Zero sugar energy cola.",             price: 1700, image: "Images/E-Cola Lite.png" }
+      { id: 1,  name: "HamBurger",            description: "Classic grilled burger.",              price: 1700, image: "../Images/Hamburger.png" },
+      { id: 2,  name: "Cheese Burger",        description: "Juicy patty with melted cheese.",     price: 1700, image: "../Images/Cheese Burger.png" },
+      { id: 3,  name: "Double Cheese Burger", description: "Two patties, double cheese blast.",   price: 2500, image: "../Images/Double Cheese Burger.png" },
+      { id: 4,  name: "BBQ Bacon Burger",     description: "Smoky BBQ sauce & crispy bacon.",     price: 3200, image: "../Images/BBQ Bacon Burger.png" },
+      { id: 5,  name: "Chicken Burger",       description: "Crispy chicken fillet burger.",       price: 2500, image: "../Images/Chicken Burger.png" },
+      { id: 6,  name: "Fries",                description: "Golden salted fries.",                price: 750,  image: "../Images/Fries.png" },
+      { id: 7,  name: "Spunk",                description: "Signature soft drink.",               price: 2500, image: "../Images/Spunk.png" },
+      { id: 8,  name: "Spunk Lite",           description: "Low sugar, same kick.",               price: 1700, image: "../Images/Spunk Lite.png" },
+      { id: 9,  name: "E-Cola",               description: "Carbonated energy cola.",             price: 2500, image: "../Images/E-Cola.png" },
+      { id: 10, name: "E-Cola Lite",          description: "Zero sugar energy cola.",             price: 1700, image: "../Images/E-Cola Lite.png" }
     ];
 
     const DELIVERY_FEE = 0; // in ₹
@@ -599,6 +597,7 @@
     const checkoutBtn = document.getElementById("checkout-btn");
 
     let cart = [];
+    let lastBillNo = null; // for PDF filename
 
     const padEnd = (value, length) => String(value).padEnd(length, " ");
     const padStart = (value, length) => String(value).padStart(length, " ");
@@ -650,6 +649,7 @@
       renderCart();
     }
 
+    // Discount logic: ≥1L 1%, ≥2L 2%, ... ≥5L 5%, ≥10L 10%
     function getDiscountPercent(subtotal) {
       if (subtotal >= 1000000) return 10;
       if (subtotal >= 500000) return 5;
@@ -709,9 +709,7 @@
         applyButtons.forEach(btn => {
           btn.addEventListener("click", () => {
             const id = parseInt(btn.getAttribute("data-id"), 10);
-            const input = cartItemsContainer.querySelector(
-              `.qty-input[data-id="${id}"]`
-            );
+            const input = cartItemsContainer.querySelector(`.qty-input[data-id="${id}"]`);
             let qty = parseInt(input.value, 10);
             if (isNaN(qty) || qty <= 0) qty = 1;
             changeQtyDirect(id, qty);
@@ -749,6 +747,7 @@
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-GB");
       const billNo = generateBillNumber();
+      lastBillNo = billNo; // remember for PDF filename
 
       const subtotal = Number(subtotalEl.textContent) || 0;
       const discountPercent = Number(discountPercentEl.textContent) || 0;
@@ -844,55 +843,99 @@
       return lines.join("\n");
     }
 
+    function downloadReceiptPdf(receiptText) {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("PDF generator not available. Please try again.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        unit: "pt",
+        format: "a4"
+      });
+
+      doc.setFont("courier", "normal"); // monospaced font
+      doc.setFontSize(10);
+
+      const marginLeft = 40;
+      const marginTop = 40;
+      const lineHeight = 14;
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      let y = marginTop;
+
+      receiptText.split("\n").forEach(line => {
+        if (y > pageHeight - marginTop) {
+          doc.addPage();
+          y = marginTop;
+        }
+        doc.text(line, marginLeft, y);
+        y += lineHeight;
+      });
+
+      const fileBillNo = lastBillNo || new Date().getTime();
+      doc.save(`FoodieHaven_Receipt_${fileBillNo}.pdf`);
+    }
+
     checkoutBtn.addEventListener("click", async () => {
-	  if (cart.length === 0) {
-		alert("Your cart is empty. Add something first.");
-		return;
-	  }
+      if (cart.length === 0) {
+        alert("Your cart is empty. Add something first.");
+        return;
+      }
 
-	  const name = document.getElementById("char-name").value.trim();
-	  const phone = document.getElementById("char-phone").value.trim();
+      const name = document.getElementById("char-name").value.trim();
+      const phone = document.getElementById("char-phone").value.trim();
 
-	  if (name === "" || phone === "") {
-		alert("Please enter both Character Name and IC Phone Number.");
-		return;
-	  }
+      if (name === "" || phone === "") {
+        alert("Please enter both Character Name and IC Phone Number.");
+        return;
+      }
 
-	  const receiptText = buildReceiptText({ name, phone });
+      const receiptText = buildReceiptText({ name, phone });
 
-	  const content =
-		`📦 **New ${SHOP_NAME} Order**\n` +
-		`👤 **Name:** ${name}\n` +
-		`📱 **IC Phone:** ${phone}\n\n` +
-		"```" + "\n" + receiptText + "\n```";
+      const content =
+        `📦 **New ${SHOP_NAME} Order**\n` +
+        `👤 **Character:** ${name}\n` +
+        `📱 **IC Phone:** ${phone}\n\n` +
+        "```" + "\n" + receiptText + "\n```";
 
-	  try {
-		checkoutBtn.disabled = true;
-		checkoutBtn.textContent = "Sending...";
+      try {
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = "Sending...";
 
-		const response = await fetch("/.netlify/functions/send-order", {
-		  method: "POST",
-		  headers: { "Content-Type": "application/json" },
-		  body: JSON.stringify({ content }),
-		});
+        // Call Netlify Function (which hides the webhook)
+        const response = await fetch("/.netlify/functions/send-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
 
-		if (!response.ok) {
-		  console.error("Function response:", await response.text());
-		  alert("Failed to send order to Discord. Please try again later or place the order manually.");
-		} else {
-		  alert("Order sent successfully!");
-		  cart = [];
-		  renderCart();
-		}
-	  } catch (err) {
-		console.error(err);
-		alert("Error sending order!");
-	  } finally {
-		checkoutBtn.disabled = false;
-		checkoutBtn.textContent = "Place Order";
-	  }
-	});
+        if (!response.ok) {
+          console.error("Function response:", await response.text());
+          alert("Failed to send order to Discord. Please try again later or place the order manually.");
+        } else {
+          const wantsPdf = confirm(
+            "Order sent successfully!\n\nDo you want to download the receipt as a PDF?"
+          );
 
+          if (wantsPdf) {
+            downloadReceiptPdf(receiptText);
+          }
+
+          cart = [];
+          renderCart();
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error sending order!");
+      } finally {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = "Place Order";
+      }
+    });
+
+    // initial render
     renderMenu();
     renderCart();
   </script>
