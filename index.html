@@ -55,7 +55,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* NEW: brand block with logo + text */
+    /* brand block with logo + text */
     .shop-brand {
       display: flex;
       align-items: flex-start;
@@ -386,14 +386,86 @@
       color: rgba(255, 255, 255, 0.5);
     }
 
-    /* Small screen layout */
-    @media (max-width: 800px) {
+    /* ---------- Responsive: mobile / tablet ---------- */
+
+    @media (max-width: 900px) {
+      body {
+        padding: 12px;
+      }
+
       .app {
         grid-template-columns: 1fr;
+        padding: 18px;
+        gap: 16px;
       }
 
       .cart {
-        order: -1;
+        order: 2;
+      }
+
+      .left {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .shop-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .shop-brand {
+        align-items: center;
+      }
+
+      .shop-logo {
+        width: 52px;
+        height: 52px;
+      }
+
+      .shop-title {
+        font-size: 1.4rem;
+      }
+
+      .shop-tagline,
+      .shop-intro {
+        font-size: 0.8rem;
+      }
+
+      .status-pill {
+        align-self: flex-start;
+        margin-top: 4px;
+      }
+
+      .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .app {
+        padding: 14px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-summary {
+        font-size: 0.8rem;
+      }
+
+      .cart-title {
+        font-size: 0.8rem;
+      }
+
+      .cart-badge {
+        font-size: 0.65rem;
       }
     }
   </style>
@@ -495,7 +567,7 @@
 
   <script>
     // 🔗 PASTE YOUR DISCORD WEBHOOK URL HERE
-    const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1446494886487523371/xLaIyjqA8Qf1Mfgri7M9nzkSieJclMaT_tVD6-Fcy169FC6laut2b_HuXV2mpIya9EL3";
+    const DISCORD_WEBHOOK_URL = "PASTE_YOUR_WEBHOOK_URL_HERE";
 
     // shop / receipt config
     const SHOP_NAME = "Foodie Haven";
@@ -504,16 +576,16 @@
 
     // --- MENU: your items, prices (₹), and image paths ---
     const MENU_ITEMS = [
-      { id: 1, name: "HamBurger",        description: "Classic grilled burger.",           price: 1700, image: "Images/HamBurger.png" },
-      { id: 2, name: "Cheese Burger",    description: "Juicy patty with melted cheese.",  price: 1700, image: "Images/Cheese Burger.png" },
-      { id: 3, name: "Double Cheese Burger", description: "Two patties, double cheese blast.", price: 2500, image: "Images/Double Cheese Burger.png" },
-      { id: 4, name: "BBQ Bacon Burger", description: "Smoky BBQ sauce & crispy bacon.",  price: 3200, image: "Images/BBQ Bacon Burger.png" },
-      { id: 5, name: "Chicken Burger",   description: "Crispy chicken fillet burger.",    price: 2500, image: "Images/Chicken Burger.png" },
-      { id: 6, name: "Fries",            description: "Golden salted fries.",             price: 750,  image: "Images/Fries.png" },
-      { id: 7, name: "Spunk",            description: "Signature soft drink.",            price: 2500, image: "Images/Spunk.png" },
-      { id: 8, name: "Spunk Lite",       description: "Low sugar, same kick.",            price: 1700, image: "Images/Spunk Lite.png" },
-      { id: 9, name: "E-Cola",           description: "Carbonated energy cola.",          price: 2500, image: "Images/E-Cola.png" },
-      { id: 10, name: "E-Cola Lite",     description: "Zero sugar energy cola.",          price: 1700, image: "Images/E-Cola Lite.png" }
+      { id: 1, name: "HamBurger",             description: "Classic grilled burger.",              price: 1700, image: "Images/Hamburger.png" },
+      { id: 2, name: "Cheese Burger",         description: "Juicy patty with melted cheese.",     price: 1700, image: "Images/Cheese Burger.png" },
+      { id: 3, name: "Double Cheese Burger",  description: "Two patties, double cheese blast.",   price: 2500, image: "Images/Double Cheese Burger.png" },
+      { id: 4, name: "BBQ Bacon Burger",      description: "Smoky BBQ sauce & crispy bacon.",     price: 3200, image: "Images/BBQ Bacon Burger.png" },
+      { id: 5, name: "Chicken Burger",        description: "Crispy chicken fillet burger.",       price: 2500, image: "Images/Chicken Burger.png" },
+      { id: 6, name: "Fries",                 description: "Golden salted fries.",                price: 750,  image: "Images/Fries.png" },
+      { id: 7, name: "Spunk",                 description: "Signature soft drink.",               price: 2500, image: "Images/Spunk.png" },
+      { id: 8, name: "Spunk Lite",            description: "Low sugar, same kick.",               price: 1700, image: "Images/Spunk Lite.png" },
+      { id: 9, name: "E-Cola",                description: "Carbonated energy cola.",             price: 2500, image: "Images/E-Cola.png" },
+      { id: 10, name: "E-Cola Lite",          description: "Zero sugar energy cola.",             price: 1700, image: "Images/E-Cola Lite.png" }
     ];
 
     const DELIVERY_FEE = 0; // in ₹
@@ -833,5 +905,3 @@
   </script>
 </body>
 </html>
-
-
