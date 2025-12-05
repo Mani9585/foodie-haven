@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GTA RP Food Portal</title>
+  <title>Foodie Haven</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- jsPDF for generating PDF receipt -->
@@ -17,7 +17,6 @@
     }
 
     body {
-      /* Background image */
       background:
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
         url("../Images/background.jpg") center center fixed no-repeat;
@@ -44,7 +43,6 @@
       gap: 20px;
     }
 
-    /* Left side: intro + menu */
     .left {
       display: flex;
       flex-direction: column;
@@ -214,7 +212,6 @@
       transform: scale(0.97);
     }
 
-    /* Right side: cart */
     .cart {
       background: rgba(7, 10, 15, 0.95);
       border-radius: 16px;
@@ -341,11 +338,6 @@
       font-size: 0.8rem;
     }
 
-    .qty-input::-webkit-inner-spin-button,
-    .qty-input::-webkit-outer-spin-button {
-      opacity: 1;
-    }
-
     .qty-apply {
       font-size: 0.7rem;
       padding: 4px 8px;
@@ -356,10 +348,6 @@
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-    }
-
-    .qty-apply:active {
-      transform: scale(0.96);
     }
 
     .checkout-inputs {
@@ -383,30 +371,15 @@
       font-size: 0.85rem;
     }
 
-    .checkout-field::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* ---------- Responsive ---------- */
-
     @media (max-width: 900px) {
-      body {
-        padding: 12px;
-      }
-
+      body { padding: 12px; }
       .app {
         grid-template-columns: 1fr;
         padding: 18px;
         gap: 16px;
       }
-
-      .cart {
-        order: 2;
-      }
-
-      .left {
-        order: 1;
-      }
+      .cart { order: 2; }
+      .left { order: 1; }
     }
 
     @media (max-width: 768px) {
@@ -415,59 +388,21 @@
         align-items: flex-start;
         gap: 12px;
       }
-
-      .shop-brand {
-        align-items: center;
-      }
-
-      .shop-logo {
-        width: 52px;
-        height: 52px;
-      }
-
-      .shop-title {
-        font-size: 1.4rem;
-      }
-
-      .shop-tagline,
-      .shop-intro {
-        font-size: 0.8rem;
-      }
-
-      .status-pill {
-        align-self: flex-start;
-        margin-top: 4px;
-      }
-
-      .menu-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .shop-brand { align-items: center; }
+      .shop-logo { width: 52px; height: 52px; }
+      .shop-title { font-size: 1.4rem; }
+      .shop-tagline, .shop-intro { font-size: 0.8rem; }
+      .status-pill { align-self: flex-start; margin-top: 4px; }
+      .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-
-      .app {
-        padding: 14px;
-      }
-
-      .menu-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .cart-summary {
-        font-size: 0.8rem;
-      }
-
-      .cart-title {
-        font-size: 0.8rem;
-      }
-
-      .cart-badge {
-        font-size: 0.65rem;
-      }
+      body { padding: 10px; }
+      .app { padding: 14px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .cart-summary { font-size: 0.8rem; }
+      .cart-title { font-size: 0.8rem; }
+      .cart-badge { font-size: 0.65rem; }
     }
   </style>
 </head>
@@ -477,7 +412,6 @@
     <div class="left">
       <header class="shop-header">
         <div class="shop-brand">
-          <!-- BUSINESS LOGO -->
           <img src="../Images/logo.png" alt="Foodie Haven Logo" class="shop-logo">
           <div>
             <div class="shop-title">Foodie Haven</div>
@@ -501,10 +435,7 @@
           <span>Menu</span>
           <span style="font-size: 0.7rem; opacity: 0.6;">Select items to add to your cart</span>
         </div>
-
-        <div class="menu-grid" id="menu">
-          <!-- Menu items will be rendered here by JS -->
-        </div>
+        <div class="menu-grid" id="menu"></div>
       </div>
     </div>
 
@@ -541,28 +472,18 @@
       <div class="checkout">
         <div class="checkout-inputs">
           <label for="char-name">Character Name</label>
-          <input
-            type="text"
-            id="char-name"
-            class="checkout-field"
-            placeholder="Ex: Jhon"
-          >
+          <input type="text" id="char-name" class="checkout-field" placeholder="Ex: Jhon">
 
           <label for="char-phone">IC Phone Number</label>
-          <input
-            type="number"
-            id="char-phone"
-            class="checkout-field"
-            placeholder="Ex: 123456"
-          >
+          <input type="number" id="char-phone" class="checkout-field" placeholder="Ex: 123456">
 		  
-		  <label for="order-for">Ordering For</label>
-		  <input
-			type="text"
-			id="order-for"
-			class="checkout-field"
-			placeholder="Ex: For MCPD / For EMS / For Mechanic"
-		  >
+          <label for="order-for">Ordering For</label>
+          <input
+            type="text"
+            id="order-for"
+            class="checkout-field"
+            placeholder="Ex: For MCPD / For EMS / For Mechanic"
+          >
         </div>
 
         <button class="btn btn-checkout" id="checkout-btn">Place Order</button>
@@ -574,10 +495,9 @@
   </div>
 
   <script>
-    // shop / receipt config
     const SHOP_NAME = "Foodie Haven";
     const SHOP_ADDRESS = "Adyar, Near Boat Garage, 8245";
-    const GST_RATE = 0; // in %
+    const GST_RATE = 0;
 
     const MENU_ITEMS = [
       { id: 1,  name: "HamBurger",            description: "Classic grilled burger.",              price: 1700, image: "../Images/HamBurger.png" },
@@ -592,7 +512,7 @@
       { id: 10, name: "E-Cola Lite",          description: "Zero sugar energy cola.",             price: 1700, image: "../Images/E-Cola Lite.png" }
     ];
 
-    const DELIVERY_FEE = 0; // in ₹
+    const DELIVERY_FEE = 0;
 
     const menuContainer = document.getElementById("menu");
     const cartItemsContainer = document.getElementById("cart-items");
@@ -605,7 +525,7 @@
     const checkoutBtn = document.getElementById("checkout-btn");
 
     let cart = [];
-    let lastBillNo = null; // for PDF filename
+    let lastBillNo = null;
 
     const padEnd = (value, length) => String(value).padEnd(length, " ");
     const padStart = (value, length) => String(value).padStart(length, " ");
@@ -657,7 +577,6 @@
       renderCart();
     }
 
-    // Discount logic: ≥1L 1%, ≥2L 2%, ... ≥5L 5%, ≥10L 10%
     function getDiscountPercent(subtotal) {
       if (subtotal >= 1000000) return 10;
       if (subtotal >= 500000) return 5;
@@ -751,11 +670,12 @@
       totalEl.textContent = total;
     }
 
-    function buildReceiptText({ name, phone }) {
+    // 🔹 FIXED: accept orderFor as parameter
+    function buildReceiptText({ name, phone, orderFor }) {
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-GB");
       const billNo = generateBillNumber();
-      lastBillNo = billNo; // remember for PDF filename
+      lastBillNo = billNo;
 
       const subtotal = Number(subtotalEl.textContent) || 0;
       const discountPercent = Number(discountPercentEl.textContent) || 0;
@@ -792,7 +712,7 @@
       lines.push(`Bill No : ${billNo}    Date: ${dateStr}`);
       lines.push(`M/s : ${name}`);
       lines.push(`IC Phone : ${phone}`);
-	  lines.push(`Ordering For : ${orderFor}`);
+      lines.push(`Ordering For : ${orderFor}`);
       lines.push("");
       lines.push(header);
       lines.push(sepLine);
@@ -853,43 +773,41 @@
     }
 
     function downloadReceiptPdf(receiptText) {
-	  if (!window.jspdf || !window.jspdf.jsPDF) {
-		alert("PDF generator not available. Please try again.");
-		return;
-	  }
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("PDF generator not available. Please try again.");
+        return;
+      }
 
-	  const { jsPDF } = window.jspdf;
-	  const doc = new jsPDF({
-		unit: "pt",
-		format: "a4"
-	  });
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        unit: "pt",
+        format: "a4"
+      });
 
-	  // Use a readable monospaced font & slightly bigger size
-	  doc.setFont("courier", "normal");
-	  doc.setFontSize(12);
+      doc.setFont("courier", "normal");
+      doc.setFontSize(12);
 
-	  const marginLeft = 40;
-	  const marginTop = 40;
-	  const lineHeight = 16;
-	  const pageHeight = doc.internal.pageSize.getHeight();
+      const marginLeft = 40;
+      const marginTop = 40;
+      const lineHeight = 16;
+      const pageHeight = doc.internal.pageSize.getHeight();
 
-	  let y = marginTop;
+      let y = marginTop;
 
-	  // 🔹 Replace ₹ with ASCII-safe "Rs." for PDF only
-	  const pdfText = receiptText.replace(/₹/g, "Rs.");
+      const pdfText = receiptText.replace(/₹/g, "Rs.");
 
-	  pdfText.split("\n").forEach(line => {
-		if (y > pageHeight - marginTop) {
-		  doc.addPage();
-		  y = marginTop;
-		}
-		doc.text(line, marginLeft, y);
-		y += lineHeight;
-	  });
+      pdfText.split("\n").forEach(line => {
+        if (y > pageHeight - marginTop) {
+          doc.addPage();
+          y = marginTop;
+        }
+        doc.text(line, marginLeft, y);
+        y += lineHeight;
+      });
 
-	  const fileBillNo = lastBillNo || new Date().getTime();
-	  doc.save(`FoodieHaven_Receipt_${fileBillNo}.pdf`);
-	}
+      const fileBillNo = lastBillNo || new Date().getTime();
+      doc.save(`FoodieHaven_Receipt_${fileBillNo}.pdf`);
+    }
 
     checkoutBtn.addEventListener("click", async () => {
       if (cart.length === 0) {
@@ -897,29 +815,29 @@
         return;
       }
 
-	const name = document.getElementById("char-name").value.trim();
-	const phone = document.getElementById("char-phone").value.trim();
-	const orderFor = document.getElementById("order-for").value.trim();
+      const name = document.getElementById("char-name").value.trim();
+      const phone = document.getElementById("char-phone").value.trim();
+      const orderFor = document.getElementById("order-for").value.trim();
 
-	if (name === "" || phone === "" || orderFor === "") {
-	  alert("Please fill Character Name, IC Phone Number, and Ordering For.");
-	  return;
-	}
+      if (name === "" || phone === "" || orderFor === "") {
+        alert("Please fill Character Name, IC Phone Number, and Ordering For.");
+        return;
+      }
 
-      const receiptText = buildReceiptText({ name, phone });
+      // 🔹 Pass orderFor into buildReceiptText now
+      const receiptText = buildReceiptText({ name, phone, orderFor });
 
-	  const content =
-		`📦 **New ${SHOP_NAME} Order**\n` +
-		`👤 **Character:** ${name}\n` +
-		`📱 **IC Phone:** ${phone}\n` +
-		`🏢 **Ordering For:** ${orderFor}\n\n` +
-		"```" + "\n" + receiptText + "\n```";
+      const content =
+        `📦 **New ${SHOP_NAME} Order**\n` +
+        `👤 **Character:** ${name}\n` +
+        `📱 **IC Phone:** ${phone}\n` +
+        `🏢 **Ordering For:** ${orderFor}\n\n` +
+        "```" + "\n" + receiptText + "\n```";
 
       try {
         checkoutBtn.disabled = true;
         checkoutBtn.textContent = "Sending...";
 
-        // Call Netlify Function (which hides the webhook)
         const response = await fetch("/.netlify/functions/send-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -950,7 +868,6 @@
       }
     });
 
-    // initial render
     renderMenu();
     renderCart();
   </script>
