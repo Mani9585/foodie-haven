@@ -844,39 +844,43 @@
     }
 
     function downloadReceiptPdf(receiptText) {
-      if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert("PDF generator not available. Please try again.");
-        return;
-      }
+	  if (!window.jspdf || !window.jspdf.jsPDF) {
+		alert("PDF generator not available. Please try again.");
+		return;
+	  }
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-        unit: "pt",
-        format: "a4"
-      });
+	  const { jsPDF } = window.jspdf;
+	  const doc = new jsPDF({
+		unit: "pt",
+		format: "a4"
+	  });
 
-      doc.setFont("courier", "normal"); // monospaced font
-      doc.setFontSize(10);
+	  // Use a readable monospaced font & slightly bigger size
+	  doc.setFont("courier", "normal");
+	  doc.setFontSize(12);
 
-      const marginLeft = 40;
-      const marginTop = 40;
-      const lineHeight = 14;
-      const pageHeight = doc.internal.pageSize.getHeight();
+	  const marginLeft = 40;
+	  const marginTop = 40;
+	  const lineHeight = 16;
+	  const pageHeight = doc.internal.pageSize.getHeight();
 
-      let y = marginTop;
+	  let y = marginTop;
 
-      receiptText.split("\n").forEach(line => {
-        if (y > pageHeight - marginTop) {
-          doc.addPage();
-          y = marginTop;
-        }
-        doc.text(line, marginLeft, y);
-        y += lineHeight;
-      });
+	  // 🔹 Replace ₹ with ASCII-safe "Rs." for PDF only
+	  const pdfText = receiptText.replace(/₹/g, "Rs.");
 
-      const fileBillNo = lastBillNo || new Date().getTime();
-      doc.save(`FoodieHaven_Receipt_${fileBillNo}.pdf`);
-    }
+	  pdfText.split("\n").forEach(line => {
+		if (y > pageHeight - marginTop) {
+		  doc.addPage();
+		  y = marginTop;
+		}
+		doc.text(line, marginLeft, y);
+		y += lineHeight;
+	  });
+
+	  const fileBillNo = lastBillNo || new Date().getTime();
+	  doc.save(`FoodieHaven_Receipt_${fileBillNo}.pdf`);
+	}
 
     checkoutBtn.addEventListener("click", async () => {
       if (cart.length === 0) {
@@ -941,4 +945,3 @@
   </script>
 </body>
 </html>
-
